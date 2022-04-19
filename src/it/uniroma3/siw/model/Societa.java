@@ -1,7 +1,9 @@
 package it.uniroma3.siw.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +21,10 @@ public class Societa {
 	
 	private String numeroTelefonico;
 	
-	@ManyToOne
+	// Fetch: è probabile che, accedendo a un oggetto Societa, si debba accedere anche al suo Indirizzo; confermiamo esplicitamente il valore di default
+	// Cascade: è ragionevole che ad un indirizzo corrisponda una sola società nella maggior parte dei casi. Per cui questa associazione può essere vista come una 
+	// OneToOne, in cui è opportuno propagare la persist
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	private Indirizzo indirizzo;
 
 	public Long getId() {

@@ -3,6 +3,7 @@ package it.uniroma3.siw.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,9 +24,15 @@ public class Corso {
 	
 	private int durataInMesi;
 	
-	@ManyToMany(mappedBy = "corsi")
+	// Fetch: per quanto potrebbe essere comune lavorare con gli allievi di un corso, essi potrebbero essere molto numerosi. Per evitare di avere una "catena di
+	// associazioni eager", lasciamo il valore di default
+	// Cascade: potrebbe essere conveniente propagare la persist sugli allievi, specie nel caso in cui si trattasse di allievi "nuovi" non nel DB. Inoltre questa
+	// associazione può essere vista come una composizione
+	@ManyToMany(mappedBy = "corsi", cascade= {CascadeType.PERSIST})
 	private List<Allievo> allievi;
 	
+	// Fetch: è conveniente, per ragioni di costo e di utilizzo, caricare anche il Docente
+	// Cascade: persist non sarebbe conveniente nel caso in cui il Docente già esistesse nel DB (caso comune); la remove sarebbe concettualmente sbagliata
 	@ManyToOne
 	private Docente docente;
 

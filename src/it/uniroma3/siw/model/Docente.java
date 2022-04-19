@@ -3,7 +3,9 @@ package it.uniroma3.siw.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +28,9 @@ public class Docente {
 	
 	private String numeroPartitaIva;
 	
-	@OneToMany(mappedBy = "docente")
+	// Fetch: è molto probabile che dato un Docente si debba lavorare sui suoi corsi, quindi li carichiamo subito usando una strategia eager
+	// Cascade: quando carico nel DB un nuovo docente, ha senso caricare i suoi corsi (che sicuramente non sono presenti nel DB). 
+	@OneToMany(mappedBy = "docente", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	private List<Corso> corsi;
 
 	public Long getId() {

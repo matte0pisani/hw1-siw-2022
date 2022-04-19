@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,10 +30,16 @@ public class Allievo {
 	
 	private String email;
 	
+	// Fetch: è plausibile che dato un Allievo si debba accedere in vari casi d'uso alla sua Società
+	// Cascade: assumendo che una Societa abbia molti dipendenti, sarebbe costoso tentare di fare la persist (tra l'altro a vuoto) di una stessa Societa per ogni 
+	// dipendente che viene inserito nel DB. Similmente per la merge. Mentre sarebbe sbagliato rimuovere sempre insieme ad un Allievo la sua Societa
 	@ManyToOne
 	private Societa societa;
 	
-	@ManyToMany
+	// Fetch: è plausibile che dato un Allievo si debba accedere in vari casi d'uso ai suoi corsi
+	// Cascade: fare la persist su un Allievo e su tutti i suoi corsi sarebbe utile soltanto se l'Allievo in questione fosse il primo allievo per ogni Corso; 
+	// altrimenti si farebbe la persist di oggetti già presenti nel DB. Sarebbe inoltre sbagliato rimuovere insieme ad un Allievo tutti i corsi a cui partecipa
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Corso> corsi;
 
 	public Long getId() {
@@ -98,5 +105,15 @@ public class Allievo {
 	public void setSocieta(Societa societa) {
 		this.societa = societa;
 	}
+
+	public List<Corso> getCorsi() {
+		return corsi;
+	}
+
+	public void setCorsi(List<Corso> corsi) {
+		this.corsi = corsi;
+	}
+	
+	
 	
 }
