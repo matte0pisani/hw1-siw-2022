@@ -26,8 +26,8 @@ public class Corso {
 	
 	// Fetch: per quanto potrebbe essere comune lavorare con gli allievi di un corso, essi potrebbero essere molto numerosi. Per evitare di avere una "catena di
 	// associazioni eager", lasciamo il valore di default
-	// Cascade: potrebbe essere conveniente propagare la persist sugli allievi, specie nel caso in cui si trattasse di allievi "nuovi" non nel DB. Inoltre questa
-	// associazione può essere vista come una composizione
+	// Cascade: potrebbe essere conveniente propagare la persist sugli allievi, specie nel caso in cui si trattasse di allievi "nuovi" non nel DB. Ma se invece 
+	// contenesse tutti allievi già registrati nel DB sarebbe altamente inefficiente
 	@ManyToMany(mappedBy = "corsi")
 	private List<Allievo> allievi;
 	
