@@ -1,6 +1,7 @@
 package it.uniroma3.siw.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ public class Allievo {
 	
 	private LocalDate dataDiNascita;
 	
+	//@Column(unique=true)
 	private int numeroDiMatricola;
 	
 	private String email;
@@ -41,6 +43,14 @@ public class Allievo {
 	// altrimenti si farebbe la persist di oggetti già presenti nel DB. Sarebbe inoltre sbagliato rimuovere insieme ad un Allievo tutti i corsi a cui partecipa
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Corso> corsi;
+	
+	public Allievo() {
+		this.corsi = new ArrayList<>();
+	}
+	
+	public void addCorso(Corso c) {
+		this.corsi.add(c);
+	}
 
 	public Long getId() {
 		return id;

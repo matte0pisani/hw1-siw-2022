@@ -1,6 +1,7 @@
 package it.uniroma3.siw.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,7 +23,7 @@ public class Docente {
 	
 	private String cognome;
 	
-	private LocalDateTime dataDiNascita;
+	private LocalDate dataDiNascita;
 	
 	private String luogoDiNascita;
 	
@@ -30,8 +31,12 @@ public class Docente {
 	
 	// Fetch: è molto probabile che dato un Docente si debba lavorare sui suoi corsi, quindi li carichiamo subito usando una strategia eager
 	// Cascade: quando carico nel DB un nuovo docente, ha senso caricare i suoi corsi (che sicuramente non sono presenti nel DB). 
-	@OneToMany(mappedBy = "docente", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+	@OneToMany(mappedBy = "docente", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST}) // modificato per test
 	private List<Corso> corsi;
+	
+	public Docente() {
+		this.corsi = new ArrayList<Corso>();
+	}
 
 	public Long getId() {
 		return id;
@@ -57,11 +62,11 @@ public class Docente {
 		this.cognome = cognome;
 	}
 
-	public LocalDateTime getDataDiNascita() {
+	public LocalDate getDataDiNascita() {
 		return dataDiNascita;
 	}
 
-	public void setDataDiNascita(LocalDateTime dataDiNascita) {
+	public void setDataDiNascita(LocalDate dataDiNascita) {
 		this.dataDiNascita = dataDiNascita;
 	}
 
@@ -88,5 +93,6 @@ public class Docente {
 	public void setCorsi(List<Corso> corsi) {
 		this.corsi = corsi;
 	}
+	
 	
 }

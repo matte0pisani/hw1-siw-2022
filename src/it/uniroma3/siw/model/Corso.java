@@ -1,6 +1,7 @@
 package it.uniroma3.siw.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,19 +23,23 @@ public class Corso {
 	
 	private LocalDate dataInizio;
 	
-	private int durataInMesi;
+	private Integer durataInMesi;
 	
 	// Fetch: per quanto potrebbe essere comune lavorare con gli allievi di un corso, essi potrebbero essere molto numerosi. Per evitare di avere una "catena di
 	// associazioni eager", lasciamo il valore di default
 	// Cascade: potrebbe essere conveniente propagare la persist sugli allievi, specie nel caso in cui si trattasse di allievi "nuovi" non nel DB. Ma se invece 
 	// contenesse tutti allievi già registrati nel DB sarebbe altamente inefficiente
-	@ManyToMany(mappedBy = "corsi")
+	@ManyToMany(mappedBy = "corsi", cascade = CascadeType.PERSIST)	// modificato per motivi di test
 	private List<Allievo> allievi;
 	
 	// Fetch: è conveniente, per ragioni di costo e di utilizzo, caricare anche il Docente
 	// Cascade: persist non sarebbe conveniente nel caso in cui il Docente già esistesse nel DB (caso comune); la remove sarebbe concettualmente sbagliata
 	@ManyToOne
 	private Docente docente;
+	
+	public Corso() {
+		this.allievi = new ArrayList<>();
+	}
 
 	public Long getId() {
 		return id;
@@ -60,11 +65,11 @@ public class Corso {
 		this.dataInizio = dataInizio;
 	}
 
-	public int getDurataInMesi() {
+	public Integer getDurataInMesi() {
 		return durataInMesi;
 	}
 
-	public void setDurataInMesi(int durataInMesi) {
+	public void setDurataInMesi(Integer durataInMesi) {
 		this.durataInMesi = durataInMesi;
 	}
 
@@ -74,6 +79,14 @@ public class Corso {
 
 	public void setAllievi(List<Allievo> allievi) {
 		this.allievi = allievi;
+	}
+
+	public Docente getDocente() {
+		return docente;
+	}
+
+	public void setDocente(Docente docente) {
+		this.docente = docente;
 	}
 	
 	
